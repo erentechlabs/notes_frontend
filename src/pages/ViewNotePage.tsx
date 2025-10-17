@@ -6,11 +6,13 @@ import Button from '@/components/ui/Button';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import { noteApi } from '@/services/api';
 import { formatRelativeTime } from '@/utils/date';
+import { useToast } from '@/contexts/ToastContext';
 import type { NoteResponse } from '@/types/note';
 
 export default function ViewNotePage() {
   const { urlCode } = useParams<{ urlCode: string }>();
   const navigate = useNavigate();
+  const { showToast } = useToast();
   const [note, setNote] = useState<NoteResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -56,7 +58,7 @@ export default function ViewNotePage() {
       setIsEditing(false);
     } catch (error) {
       console.error('Failed to update note:', error);
-      alert('Failed to update note. Please try again.');
+      showToast('Failed to update note. Please try again.', 'error');
     } finally {
       setIsSaving(false);
     }

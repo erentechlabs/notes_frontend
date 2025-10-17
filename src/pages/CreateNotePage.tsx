@@ -7,6 +7,7 @@ import Button from '@/components/ui/Button';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import ShareModal from '@/components/ui/ShareModal';
 import { noteApi } from '@/services/api';
+import { useToast } from '@/contexts/ToastContext';
 
 export default function CreateNotePage() {
   const [content, setContent] = useState('');
@@ -16,6 +17,7 @@ export default function CreateNotePage() {
   const [showShareModal, setShowShareModal] = useState(false);
   const [shareData, setShareData] = useState<{ shareUrl: string; expiresAt: string } | null>(null);
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const hasContent = content.replace(/<[^>]*>/g, '').trim().length > 0;
 
@@ -37,7 +39,7 @@ export default function CreateNotePage() {
       setShowShareModal(true);
     } catch (error) {
       console.error('Failed to create note:', error);
-      alert('Failed to create note. Please try again.');
+      showToast('Failed to create note. Please try again.', 'error');
     } finally {
       setIsLoading(false);
     }
