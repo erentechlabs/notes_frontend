@@ -14,7 +14,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
+        target: 'https://notefade-861651561873.europe-west1.run.app',
         changeOrigin: true,
       },
     },

@@ -2,7 +2,7 @@ import axios from 'axios';
 import type { CreateNoteRequest, CreateNoteResponse, NoteResponse, UpdateNoteRequest } from '@/types/note';
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: 'https://notefade-861651561873.europe-west1.run.app/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
