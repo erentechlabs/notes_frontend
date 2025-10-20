@@ -61,14 +61,9 @@ export default function CreateNotePage() {
       {/* Header */}
       <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 animate-fade-in">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-              <span className="text-white font-bold text-xl">N</span>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold">Notes</h1>
-              <p className="text-xs text-muted-foreground">Create a temporary note</p>
-            </div>
+          <div>
+            <h1 className="text-xl font-bold">Notes</h1>
+            <p className="text-xs text-muted-foreground">Create a temporary note</p>
           </div>
 
           <div className="flex items-center gap-3">
