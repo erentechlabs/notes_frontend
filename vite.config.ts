@@ -3,8 +3,9 @@ import react from '@vitejs/plugin-react'
 import viteCompression from 'vite-plugin-compression'
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 import { resolve } from 'node:path'
-import { copyFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
+import { existsSync, copyFileSync } from 'node:fs'
+import { join } from 'node:path'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
@@ -32,8 +33,14 @@ export default defineConfig({
     // Copy index to 404 for SPA routing
     {
       name: 'copy-index-to-404',
-      closeBundle() {
-        copyFileSync('dist/index.html', 'dist/404.html')
+      writeBundle() {
+        const distPath = resolve(__dirname, 'dist');
+        const indexPath = join(distPath, 'index.html');
+        const notFoundPath = join(distPath, '404.html');
+        
+        if (existsSync(indexPath)) {
+          copyFileSync(indexPath, notFoundPath);
+        }
       }
     }
   ],
