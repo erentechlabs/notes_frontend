@@ -6,6 +6,8 @@ import DurationSelector from '@/components/ui/DurationSelector';
 import Button from '@/components/ui/Button';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import ShareModal from '@/components/ui/ShareModal';
+import SEO from '@/components/seo/SEO';
+import StructuredData from '@/components/seo/StructuredData';
 import { noteApi } from '@/services/api';
 import { useToast } from '@/contexts/ToastContext';
 
@@ -57,7 +59,16 @@ export default function CreateNotePage() {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-background">
+    <>
+      <SEO
+        title="Create & Share Notes"
+        description="Create temporary notes and share them securely. Set expiration times and collaborate effortlessly with NoteFade's modern note-taking platform."
+        type="website"
+        url="https://www.notefade.com/"
+      />
+      <StructuredData type="website" />
+      
+      <div className="h-screen flex flex-col bg-background">
       {/* Header */}
       <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 animate-fade-in">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -138,6 +149,7 @@ export default function CreateNotePage() {
           expiresAt={shareData.expiresAt}
         />
       )}
-    </div>
+      </div>
+    </>
   );
 }

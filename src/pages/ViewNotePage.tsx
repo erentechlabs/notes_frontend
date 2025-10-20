@@ -4,6 +4,8 @@ import { Calendar, Clock, Edit3, PlusCircle, Save, Loader2, AlertCircle } from '
 import RichTextEditor from '@/components/editor/RichTextEditor';
 import Button from '@/components/ui/Button';
 import ThemeToggle from '@/components/ui/ThemeToggle';
+import SEO from '@/components/seo/SEO';
+import StructuredData from '@/components/seo/StructuredData';
 import { noteApi } from '@/services/api';
 import { formatRelativeTime } from '@/utils/date';
 import { useToast } from '@/contexts/ToastContext';
@@ -68,6 +70,17 @@ export default function ViewNotePage() {
     navigate('/');
   };
 
+  const getNoteSummary = (content: string): string => {
+    const text = content.replace(/<[^>]*>/g, '').trim();
+    return text.length > 160 ? text.substring(0, 157) + '...' : text;
+  };
+
+  const getNoteTitle = (content: string): string => {
+    const text = content.replace(/<[^>]*>/g, '').trim();
+    const firstLine = text.split('\n')[0];
+    return firstLine.length > 60 ? firstLine.substring(0, 57) + '...' : firstLine || 'Shared Note';
+  };
+
   if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center bg-background">
@@ -102,7 +115,27 @@ export default function ViewNotePage() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-background">
+    <>
+      <SEO
+        title={getNoteTitle(note.content)}
+        description={getNoteSummary(note.content)}
+        type="article"
+        url={`https://www.notefade.com/note/${urlCode}`}
+        article={{
+          publishedTime: note.createdAt,
+          modifiedTime: note.updatedAt,
+        }}
+      />
+      <StructuredData
+        type="article"
+        title={getNoteTitle(note.content)}
+        description={getNoteSummary(note.content)}
+        url={`https://www.notefade.com/note/${urlCode}`}
+        datePublished={note.createdAt}
+        dateModified={note.updatedAt}
+      />
+      
+      <div className="h-screen flex flex-col bg-background">
       {/* Header */}
       <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 animate-fade-in">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -206,6 +239,7 @@ export default function ViewNotePage() {
           </Button>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }
