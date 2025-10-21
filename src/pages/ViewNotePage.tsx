@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, Clock, Edit3, PlusCircle, Save, Loader2, AlertCircle } from 'lucide-react';
-import RichTextEditor from '@/components/editor/RichTextEditor';
+
+const RichTextEditor = lazy(() => import('@/components/editor/RichTextEditor'));
 import Button from '@/components/ui/Button';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import SEO from '@/components/seo/SEO';
@@ -221,12 +222,18 @@ export default function ViewNotePage() {
       {/* Editor */}
       <main className="flex-1 overflow-hidden">
         <div className="container mx-auto px-4 py-4 h-full">
-          <RichTextEditor
-            content={isEditing ? editedContent : note.content}
-            onChange={setEditedContent}
-            readOnly={!isEditing}
-            placeholder="Note content..."
-          />
+          <Suspense fallback={
+            <div className="h-full flex items-center justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          }>
+            <RichTextEditor
+              content={isEditing ? editedContent : note.content}
+              onChange={setEditedContent}
+              readOnly={!isEditing}
+              placeholder="Note content..."
+            />
+          </Suspense>
         </div>
       </main>
 

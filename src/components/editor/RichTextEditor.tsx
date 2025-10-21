@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import TextAlign from '@tiptap/extension-text-align';
@@ -23,6 +23,8 @@ export default function RichTextEditor({
   placeholder = 'Start writing your note...',
   readOnly = false,
 }: RichTextEditorProps) {
+  const isInternalUpdate = useRef(false);
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -43,6 +45,7 @@ export default function RichTextEditor({
     content,
     editable: !readOnly,
     onUpdate: ({ editor }) => {
+      isInternalUpdate.current = true;
       onChange(editor.getHTML());
     },
     editorProps: {
@@ -53,9 +56,15 @@ export default function RichTextEditor({
   });
 
   useEffect(() => {
-    if (editor && content !== editor.getHTML()) {
-      editor.commands.setContent(content);
+    if (!editor) return;
+    
+    // Only update editor content if the change came from outside (not from user typing)
+    if (!isInternalUpdate.current && content !== editor.getHTML()) {
+      editor.commands.setContent(content, false);
     }
+    
+    // Reset the flag after checking
+    isInternalUpdate.current = false;
   }, [content, editor]);
 
   useEffect(() => {

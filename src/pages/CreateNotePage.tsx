@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Share2, Loader2 } from 'lucide-react';
-import RichTextEditor from '@/components/editor/RichTextEditor';
+
+const RichTextEditor = lazy(() => import('@/components/editor/RichTextEditor'));
 import DurationSelector from '@/components/ui/DurationSelector';
 import Button from '@/components/ui/Button';
 import ThemeToggle from '@/components/ui/ThemeToggle';
@@ -20,6 +21,21 @@ export default function CreateNotePage() {
   const [shareData, setShareData] = useState<{ shareUrl: string; expiresAt: string } | null>(null);
   const navigate = useNavigate();
   const { showToast } = useToast();
+
+  // Prefetch editor chunk on mount for instant loading
+  useEffect(() => {
+    const prefetchEditor = async () => {
+      try {
+        await import('@/components/editor/RichTextEditor');
+      } catch (error) {
+        // Ignore prefetch errors
+      }
+    };
+    
+    // Start prefetching after a short delay to prioritize initial render
+    const timeout = setTimeout(prefetchEditor, 100);
+    return () => clearTimeout(timeout);
+  }, []);
 
   const hasContent = content.replace(/<[^>]*>/g, '').trim().length > 0;
 
@@ -121,11 +137,17 @@ export default function CreateNotePage() {
       {/* Editor */}
       <main className="flex-1 overflow-hidden">
         <div className="container mx-auto px-4 py-4 h-full">
-          <RichTextEditor
-            content={content}
-            onChange={setContent}
-            placeholder="Start writing your note... Use the toolbar to format your text."
-          />
+          <Suspense fallback={
+            <div className="h-full flex items-center justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          }>
+            <RichTextEditor
+              content={content}
+              onChange={setContent}
+              placeholder="Start writing your note... Use the toolbar to format your text."
+            />
+          </Suspense>
         </div>
       </main>
 
