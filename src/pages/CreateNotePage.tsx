@@ -117,27 +117,12 @@ export default function CreateNotePage() {
     }
   };
 
-  const structuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'WebApplication',
-    name: 'NoteFade',
-    applicationCategory: 'ProductivityApplication',
-    description: 'Create and share temporary notes with rich text formatting',
-    offers: {
-      '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'USD',
-    },
-    operatingSystem: 'Web Browser',
-  };
-
   return (
     <>
       <SEO
-        title="Create Note - NoteFade"
+        title="Create Note"
         description="Create a new temporary note with rich text formatting. Share securely with automatic expiration."
-        keywords="note sharing, temporary notes, rich text notes"
-        structuredData={structuredData}
+        type="website"
       />
       <div className="h-screen flex flex-col bg-background">
       {/* Header */}
