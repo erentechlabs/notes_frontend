@@ -10,8 +10,13 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
+    "@tiptap/extension-code-block": "^2.27.0",
     "@tiptap/extension-color": "^2.2.0",
+    "@tiptap/extension-highlight": "^2.27.0",
     "@tiptap/extension-placeholder": "^2.2.0",
+    "@tiptap/extension-strike": "^2.27.0",
+    "@tiptap/extension-subscript": "^2.27.0",
+    "@tiptap/extension-superscript": "^2.27.0",
     "@tiptap/extension-task-item": "^2.26.3",
     "@tiptap/extension-task-list": "^2.26.3",
     "@tiptap/extension-text-align": "^2.2.0",
@@ -39,6 +44,7 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
+    "terser": "^5.44.0",
     "typescript": "^5.2.2",
     "vite": "^5.1.0"
   }

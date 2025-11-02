@@ -19,24 +19,26 @@ const DURATION_OPTIONS = [
 
 export default function DurationSelector({ value, onChange }: DurationSelectorProps) {
   return (
-    <div className="space-y-3 animate-fade-in">
-      <div className="flex items-center gap-2 text-sm font-medium">
-        <Clock className="h-4 w-4" />
+    <div className="space-y-3 sm:space-y-4 animate-fade-in">
+      <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <Clock className="h-4 w-4 text-muted-foreground" />
         <span>Note expires in:</span>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3">
         {DURATION_OPTIONS.map((option) => (
           <button
             key={option.value}
             type="button"
             onClick={() => onChange(option.value)}
             className={cn(
-              'px-4 py-2 rounded-lg border transition-all duration-200',
-              'hover:border-primary hover:bg-accent',
+              'px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border-2 transition-all duration-200 text-sm font-medium',
+              'hover:scale-105 active:scale-95 touch-manipulation shadow-sm',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-1',
               value === option.value
-                ? 'border-primary bg-primary/10 font-medium'
-                : 'border-border'
+                ? 'border-primary bg-primary/10 font-semibold shadow-md scale-105 text-primary'
+                : 'border-border/80 bg-background/80 hover:border-primary/50 hover:bg-accent/50 text-foreground'
             )}
+            aria-pressed={value === option.value}
           >
             {option.label}
           </button>
