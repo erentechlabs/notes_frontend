@@ -65,17 +65,17 @@ function mapBackendNote(note: Partial<import('@/types/note').NoteResponse>) {
 
 export const noteApi = {
   createNote: async (data: CreateNoteRequest): Promise<CreateNoteResponse> => {
-    const response = await api.post<CreateNoteResponse>('/v1/notes', data);
+    const response = await api.post<CreateNoteResponse>('/notes', data);
     return response.data;
   },
 
   getNote: async (urlCode: string): Promise<NoteResponse> => {
-    const response = await api.get<NoteResponse>(`/v1/notes/${urlCode}`);
+    const response = await api.get<NoteResponse>(`/notes/${urlCode}`);
     return mapBackendNote(response.data);
   },
 
   updateNote: async (urlCode: string, data: UpdateNoteRequest): Promise<NoteResponse> => {
-    const response = await api.put<NoteResponse>(`/v1/notes/${urlCode}`, data);
+    const response = await api.put<NoteResponse>(`/notes/${urlCode}`, data);
     return mapBackendNote(response.data);
   },
 };

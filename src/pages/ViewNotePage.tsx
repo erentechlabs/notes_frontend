@@ -144,7 +144,6 @@ export default function ViewNotePage() {
       showToast('Failed to copy code', 'error');
     }
   };
-  };
 
   if (isLoading) {
     return (
@@ -189,19 +188,6 @@ export default function ViewNotePage() {
     .substring(0, 150)
     .trim() + '...';
 
-  const noteStructuredData = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: `Note ${urlCode}`,
-    description: notePreview,
-    datePublished: note.createdAt,
-    dateModified: note.updatedAt,
-    author: {
-      '@type': 'Organization',
-      name: 'NoteFade App',
-    },
-  };
-
   // Determine editing state based on note's edit mode
   const noteIsReadOnly = Boolean(note.isReadOnly);
   const noteIsCheckboxOnly = !noteIsReadOnly && Boolean(note.isPartialEditingOnly);
@@ -216,12 +202,14 @@ export default function ViewNotePage() {
   return (
     <div className="h-screen flex flex-col bg-background">
       <SEO
-        title={`Note ${urlCode} - NoteFade`}
+        title={`Note ${urlCode}`}
         description={notePreview}
-        keywords="note, shared note, temporary note, view note"
-        ogType="article"
-        canonicalUrl={`${window.location.origin}/note/${urlCode}`}
-        structuredData={noteStructuredData}
+        type="article"
+        url={`${window.location.origin}/note/${urlCode}`}
+        article={{
+          publishedTime: note.createdAt,
+          modifiedTime: note.updatedAt
+        }}
       />
       {/* Header */}
       <header className="border-b border-border/60 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80 sticky top-0 z-40 shadow-sm animate-fade-in">
