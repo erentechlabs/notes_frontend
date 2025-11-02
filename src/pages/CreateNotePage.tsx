@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 import { Share2, Loader2, Search, Clock } from 'lucide-react';
 import RichTextEditor from '@/components/editor/RichTextEditor';
 import Button from '@/components/ui/Button';
@@ -8,6 +9,17 @@ import ShareModal from '@/components/ui/ShareModal';
 import FindNoteModal from '@/components/ui/FindNoteModal';
 import ConfigureDurationModal from '@/components/ui/ConfigureDurationModal';
 import SEO from '@/components/ui/SEO';
+=======
+import { Share2, Loader2 } from 'lucide-react';
+
+const RichTextEditor = lazy(() => import('@/components/editor/RichTextEditor'));
+import DurationSelector from '@/components/ui/DurationSelector';
+import Button from '@/components/ui/Button';
+import ThemeToggle from '@/components/ui/ThemeToggle';
+import ShareModal from '@/components/ui/ShareModal';
+import SEO from '@/components/seo/SEO';
+import StructuredData from '@/components/seo/StructuredData';
+>>>>>>> e427749b6667a4cd25c877a5eba5b1df6ca0d931
 import { noteApi } from '@/services/api';
 import { useToast } from '@/contexts/ToastContext';
 import type { EditMode } from '@/types/note';
@@ -23,6 +35,21 @@ export default function CreateNotePage() {
   const [showDurationModal, setShowDurationModal] = useState(false);
   const navigate = useNavigate();
   const { showToast } = useToast();
+
+  // Prefetch editor chunk on mount for instant loading
+  useEffect(() => {
+    const prefetchEditor = async () => {
+      try {
+        await import('@/components/editor/RichTextEditor');
+      } catch (error) {
+        // Ignore prefetch errors
+      }
+    };
+    
+    // Start prefetching after a short delay to prioritize initial render
+    const timeout = setTimeout(prefetchEditor, 100);
+    return () => clearTimeout(timeout);
+  }, []);
 
   const hasContent = content.replace(/<[^>]*>/g, '').trim().length > 0;
 
@@ -117,6 +144,7 @@ export default function CreateNotePage() {
   };
 
   return (
+<<<<<<< HEAD
     <div className="h-screen flex flex-col bg-background">
       <SEO
         title="Create Note - NoteFade"
@@ -131,6 +159,24 @@ export default function CreateNotePage() {
               <h1 className="text-lg sm:text-xl font-bold truncate">NoteFade</h1>
               <p className="text-[10px] sm:text-xs text-muted-foreground hidden xs:block">Create a temporary note</p>
             </div>
+=======
+    <>
+      <SEO
+        title="Create & Share Notes"
+        description="Create temporary notes and share them securely. Set expiration times and collaborate effortlessly with NoteFade's modern note-taking platform."
+        type="website"
+        url="https://www.notefade.com/"
+      />
+      <StructuredData type="website" />
+      
+      <div className="h-screen flex flex-col bg-background">
+      {/* Header */}
+      <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 animate-fade-in">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold">Notes</h1>
+            <p className="text-xs text-muted-foreground">Create a temporary note</p>
+>>>>>>> e427749b6667a4cd25c877a5eba5b1df6ca0d931
           </div>
 
           <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
@@ -179,6 +225,7 @@ export default function CreateNotePage() {
 
 
       {/* Editor */}
+<<<<<<< HEAD
       <main className="flex-1 overflow-hidden bg-gradient-to-b from-background to-muted/20">
         <div className="max-w-[1600px] mx-auto px-2 sm:px-4 lg:px-8 py-2 sm:py-4 lg:py-6 h-full">
           <RichTextEditor
@@ -186,6 +233,21 @@ export default function CreateNotePage() {
             onChange={setContent}
             placeholder="Start writing your note... Use the toolbar to format your text."
           />
+=======
+      <main className="flex-1 overflow-hidden">
+        <div className="container mx-auto px-4 py-4 h-full">
+          <Suspense fallback={
+            <div className="h-full flex items-center justify-center">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          }>
+            <RichTextEditor
+              content={content}
+              onChange={setContent}
+              placeholder="Start writing your note... Use the toolbar to format your text."
+            />
+          </Suspense>
+>>>>>>> e427749b6667a4cd25c877a5eba5b1df6ca0d931
         </div>
       </main>
 
@@ -214,6 +276,7 @@ export default function CreateNotePage() {
           expiresAt={shareData.expiresAt}
         />
       )}
-    </div>
+      </div>
+    </>
   );
 }

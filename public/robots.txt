@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Allow all crawlers
 User-agent: *
 Allow: /
@@ -8,3 +9,10 @@ Disallow: /api/
 # Sitemap location
 Sitemap: /sitemap.xml
 
+=======
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+Sitemap: https://www.notefade.com/sitemap.xml
+>>>>>>> e427749b6667a4cd25c877a5eba5b1df6ca0d931

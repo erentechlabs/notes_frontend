@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "name": "NoteFade - Share Your Thoughts Securely",
   "short_name": "NoteFade",
   "description": "Create and share temporary notes with rich text formatting. Your notes expire automatically for enhanced privacy and security.",
@@ -17,18 +18,36 @@
     },
     {
       "src": "/icon-192.png",
+=======
+  "name": "NoteFade - Share Your Thoughts",
+  "short_name": "NoteFade",
+  "description": "Create, share, and organize your notes effortlessly. A modern note-taking platform.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.png",
+>>>>>>> e427749b6667a4cd25c877a5eba5b1df6ca0d931
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
+<<<<<<< HEAD
       "src": "/icon-512.png",
+=======
+      "src": "/favicon.png",
+>>>>>>> e427749b6667a4cd25c877a5eba5b1df6ca0d931
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     }
   ],
   "categories": ["productivity", "utilities"],
+<<<<<<< HEAD
   "shortcuts": [
     {
       "name": "Create New Note",
@@ -47,3 +66,17 @@
   "prefer_related_applications": false
 }
 
+=======
+  "screenshots": [],
+  "share_target": {
+    "action": "/",
+    "method": "GET",
+    "enctype": "application/x-www-form-urlencoded",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  }
+}
+>>>>>>> e427749b6667a4cd25c877a5eba5b1df6ca0d931

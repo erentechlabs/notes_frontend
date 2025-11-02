@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+<<<<<<< HEAD
     <loc>/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 </urlset>
 
+=======
+    <loc>https://www.notefade.com/</loc>
+    <lastmod>2025-10-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <!-- Add more URLs as your app grows -->
+</urlset>
+>>>>>>> e427749b6667a4cd25c877a5eba5b1df6ca0d931
