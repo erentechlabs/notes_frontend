@@ -30,6 +30,7 @@ export default function RichTextEditor({
   checkboxOnly = false,
 }: RichTextEditorProps) {
   const isInternalUpdate = useRef(false);
+  const scrollPositionRef = useRef<number>(0);
 
   const editor = useEditor({
     extensions: [
@@ -74,8 +75,63 @@ export default function RichTextEditor({
         class: 'prose prose-sm sm:prose-lg max-w-none focus:outline-none dark:prose-invert leading-relaxed',
         'data-checkbox-only': checkboxOnly ? 'true' : 'false',
       },
-      // Prevent keyboard from opening on mobile when in checkbox-only mode
+      // Prevent keyboard from opening and scroll jumping on mobile when in checkbox-only mode
       handleDOMEvents: {
+        mousedown: (_view, event) => {
+          if (!checkboxOnly) {
+            return false;
+          }
+          const target = event.target as HTMLElement;
+          if (target.tagName === 'INPUT' && target.getAttribute('type') === 'checkbox') {
+            // Store current scroll position before checkbox interaction
+            scrollPositionRef.current = window.pageYOffset || document.documentElement.scrollTop;
+            return false;
+          }
+          return false;
+        },
+        click: (_view, event) => {
+          if (!checkboxOnly) {
+            return false;
+          }
+          const target = event.target as HTMLElement;
+          if (target.tagName === 'INPUT' && target.getAttribute('type') === 'checkbox') {
+            // Prevent scroll jumping when clicking checkboxes
+            event.stopPropagation();
+            // Restore scroll position after a brief delay
+            setTimeout(() => {
+              window.scrollTo(0, scrollPositionRef.current);
+            }, 0);
+            return false;
+          }
+          return false;
+        },
+        touchstart: (_view, event) => {
+          if (!checkboxOnly) {
+            return false;
+          }
+          const target = event.target as HTMLElement;
+          if (target.tagName === 'INPUT' && target.getAttribute('type') === 'checkbox') {
+            // Store scroll position before touch
+            scrollPositionRef.current = window.pageYOffset || document.documentElement.scrollTop;
+            return false;
+          }
+          return false;
+        },
+        touchend: (_view, event) => {
+          if (!checkboxOnly) {
+            return false;
+          }
+          const target = event.target as HTMLElement;
+          if (target.tagName === 'INPUT' && target.getAttribute('type') === 'checkbox') {
+            // Prevent scroll jumping on mobile touch and restore position
+            event.stopPropagation();
+            setTimeout(() => {
+              window.scrollTo(0, scrollPositionRef.current);
+            }, 0);
+            return false;
+          }
+          return false;
+        },
         focus: (_view, event) => {
           if (!checkboxOnly) {
             return false;

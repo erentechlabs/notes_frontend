@@ -306,6 +306,9 @@
   -moz-user-select: none;
   user-select: none;
   pointer-events: auto;
+  /* Prevent scroll jumping on mobile */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Mobile-specific improvements */
@@ -323,6 +326,17 @@
   .ProseMirror[data-checkbox-only="true"] {
     -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
+    /* Prevent scroll restoration on checkbox clicks */
+    scroll-behavior: auto;
+  }
+  
+  .ProseMirror[data-checkbox-only="true"] ul[data-type="taskList"] li input[type="checkbox"] {
+    /* Enhanced mobile checkbox behavior */
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    /* Prevent scroll jumping */
+    position: relative;
+    z-index: 1;
   }
   
   .ProseMirror ul[data-type="taskList"] li > label {
