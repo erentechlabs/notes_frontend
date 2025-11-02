@@ -83,9 +83,20 @@ export default function RichTextEditor({
           }
           const target = event.target as HTMLElement;
           if (target.tagName === 'INPUT' && target.getAttribute('type') === 'checkbox') {
-            // Store current scroll position before checkbox interaction
+            // Store current scroll position and prevent default
             scrollPositionRef.current = window.pageYOffset || document.documentElement.scrollTop;
-            return false;
+            event.preventDefault();
+            event.stopPropagation();
+            
+            // Manually toggle the checkbox
+            const checkbox = target as HTMLInputElement;
+            checkbox.checked = !checkbox.checked;
+            
+            // Trigger the change event to update TipTap
+            const changeEvent = new Event('change', { bubbles: true });
+            checkbox.dispatchEvent(changeEvent);
+            
+            return true;
           }
           return false;
         },
@@ -95,13 +106,11 @@ export default function RichTextEditor({
           }
           const target = event.target as HTMLElement;
           if (target.tagName === 'INPUT' && target.getAttribute('type') === 'checkbox') {
-            // Prevent scroll jumping when clicking checkboxes
+            // Prevent all default click behavior
+            event.preventDefault();
             event.stopPropagation();
-            // Restore scroll position after a brief delay
-            setTimeout(() => {
-              window.scrollTo(0, scrollPositionRef.current);
-            }, 0);
-            return false;
+            event.stopImmediatePropagation();
+            return true;
           }
           return false;
         },
@@ -111,9 +120,11 @@ export default function RichTextEditor({
           }
           const target = event.target as HTMLElement;
           if (target.tagName === 'INPUT' && target.getAttribute('type') === 'checkbox') {
-            // Store scroll position before touch
+            // Store scroll position and prevent default touch behavior
             scrollPositionRef.current = window.pageYOffset || document.documentElement.scrollTop;
-            return false;
+            event.preventDefault();
+            event.stopPropagation();
+            return true;
           }
           return false;
         },
@@ -123,12 +134,20 @@ export default function RichTextEditor({
           }
           const target = event.target as HTMLElement;
           if (target.tagName === 'INPUT' && target.getAttribute('type') === 'checkbox') {
-            // Prevent scroll jumping on mobile touch and restore position
+            // Prevent default and manually handle checkbox toggle
+            event.preventDefault();
             event.stopPropagation();
-            setTimeout(() => {
-              window.scrollTo(0, scrollPositionRef.current);
-            }, 0);
-            return false;
+            event.stopImmediatePropagation();
+            
+            // Manually toggle the checkbox
+            const checkbox = target as HTMLInputElement;
+            checkbox.checked = !checkbox.checked;
+            
+            // Trigger the change event to update TipTap
+            const changeEvent = new Event('change', { bubbles: true });
+            checkbox.dispatchEvent(changeEvent);
+            
+            return true;
           }
           return false;
         },
@@ -208,6 +227,46 @@ export default function RichTextEditor({
       editor.setEditable(!readOnly);
     }
   }, [editor, readOnly]);
+
+  // Add scroll position protection for checkbox-only mode
+  useEffect(() => {
+    if (!checkboxOnly) return;
+
+    let isCheckboxInteraction = false;
+    let savedScrollPosition = 0;
+
+    const handleScroll = () => {
+      if (isCheckboxInteraction) {
+        // Restore scroll position if it was a checkbox interaction
+        window.scrollTo(0, savedScrollPosition);
+        isCheckboxInteraction = false;
+      }
+    };
+
+    const handleCheckboxClick = (event: Event) => {
+      const target = event.target as HTMLElement;
+      if (target.tagName === 'INPUT' && target.getAttribute('type') === 'checkbox') {
+        savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+        isCheckboxInteraction = true;
+        
+        // Set a timeout to reset the flag
+        setTimeout(() => {
+          isCheckboxInteraction = false;
+        }, 100);
+      }
+    };
+
+    // Add event listeners
+    window.addEventListener('scroll', handleScroll, { passive: false });
+    document.addEventListener('click', handleCheckboxClick, true);
+    document.addEventListener('touchend', handleCheckboxClick, true);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('click', handleCheckboxClick, true);
+      document.removeEventListener('touchend', handleCheckboxClick, true);
+    };
+  }, [checkboxOnly]);
 
   if (!editor) {
     return null;

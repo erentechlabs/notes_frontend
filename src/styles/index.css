@@ -328,6 +328,8 @@
     -webkit-tap-highlight-color: transparent;
     /* Prevent scroll restoration on checkbox clicks */
     scroll-behavior: auto;
+    /* Prevent any scroll anchoring */
+    overflow-anchor: none;
   }
   
   .ProseMirror[data-checkbox-only="true"] ul[data-type="taskList"] li input[type="checkbox"] {
@@ -337,6 +339,15 @@
     /* Prevent scroll jumping */
     position: relative;
     z-index: 1;
+    /* Prevent focus outline that might cause scroll */
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  
+  /* Prevent scroll anchoring on the entire page when in checkbox mode */
+  body:has(.ProseMirror[data-checkbox-only="true"]) {
+    overflow-anchor: none;
   }
   
   .ProseMirror ul[data-type="taskList"] li > label {
