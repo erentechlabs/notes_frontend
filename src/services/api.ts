@@ -1,15 +1,8 @@
 import axios from 'axios';
 import type { CreateNoteRequest, CreateNoteResponse, NoteResponse, UpdateNoteRequest } from '@/types/note';
 
-// Use hardcoded url for development until production deploy
-const API_BASE_URL = 'hhttps://notefade-861651561873.europe-west1.run.app/api';
-
 const api = axios.create({
-<<<<<<< HEAD
-  baseURL: API_BASE_URL,
-=======
   baseURL: 'https://notefade-861651561873.europe-west1.run.app/api/v1',
->>>>>>> e427749b6667a4cd25c877a5eba5b1df6ca0d931
   headers: {
     'Content-Type': 'application/json',
   },

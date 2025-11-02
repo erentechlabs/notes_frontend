@@ -1,22 +1,10 @@
-<<<<<<< HEAD
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, Clock, Edit3, PlusCircle, Save, Loader2, AlertCircle, Copy, Check, Lock, CheckSquare } from 'lucide-react';
 import RichTextEditor from '@/components/editor/RichTextEditor';
 import Button from '@/components/ui/Button';
 import ThemeToggle from '@/components/ui/ThemeToggle';
-import SEO from '@/components/ui/SEO';
-=======
-import { useEffect, useState, lazy, Suspense } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, Clock, Edit3, PlusCircle, Save, Loader2, AlertCircle } from 'lucide-react';
-
-const RichTextEditor = lazy(() => import('@/components/editor/RichTextEditor'));
-import Button from '@/components/ui/Button';
-import ThemeToggle from '@/components/ui/ThemeToggle';
 import SEO from '@/components/seo/SEO';
-import StructuredData from '@/components/seo/StructuredData';
->>>>>>> e427749b6667a4cd25c877a5eba5b1df6ca0d931
 import { noteApi } from '@/services/api';
 import { formatRelativeTime } from '@/utils/date';
 import { useToast } from '@/contexts/ToastContext';
@@ -145,7 +133,6 @@ export default function ViewNotePage() {
     navigate('/');
   };
 
-<<<<<<< HEAD
   const handleCopyCode = async () => {
     if (!urlCode) return;
     try {
@@ -156,17 +143,7 @@ export default function ViewNotePage() {
       console.error('Failed to copy code:', err);
       showToast('Failed to copy code', 'error');
     }
-=======
-  const getNoteSummary = (content: string): string => {
-    const text = content.replace(/<[^>]*>/g, '').trim();
-    return text.length > 160 ? text.substring(0, 157) + '...' : text;
   };
-
-  const getNoteTitle = (content: string): string => {
-    const text = content.replace(/<[^>]*>/g, '').trim();
-    const firstLine = text.split('\n')[0];
-    return firstLine.length > 60 ? firstLine.substring(0, 57) + '...' : firstLine || 'Shared Note';
->>>>>>> e427749b6667a4cd25c877a5eba5b1df6ca0d931
   };
 
   if (isLoading) {
@@ -237,7 +214,6 @@ export default function ViewNotePage() {
   const displayedContent = isEditing || isCheckboxOnly ? editedContent : note.content;
 
   return (
-<<<<<<< HEAD
     <div className="h-screen flex flex-col bg-background">
       <SEO
         title={`Note ${urlCode} - NoteFade`}
@@ -257,37 +233,6 @@ export default function ViewNotePage() {
                 {note.isExpired ? 'Expired note' : 'View note'}
               </p>
             </div>
-=======
-    <>
-      <SEO
-        title={getNoteTitle(note.content)}
-        description={getNoteSummary(note.content)}
-        type="article"
-        url={`https://www.notefade.com/note/${urlCode}`}
-        article={{
-          publishedTime: note.createdAt,
-          modifiedTime: note.updatedAt,
-        }}
-      />
-      <StructuredData
-        type="article"
-        title={getNoteTitle(note.content)}
-        description={getNoteSummary(note.content)}
-        url={`https://www.notefade.com/note/${urlCode}`}
-        datePublished={note.createdAt}
-        dateModified={note.updatedAt}
-      />
-      
-      <div className="h-screen flex flex-col bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 animate-fade-in">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-bold">Notes</h1>
-            <p className="text-xs text-muted-foreground">
-              {note.isExpired ? 'Expired note' : 'View note'}
-            </p>
->>>>>>> e427749b6667a4cd25c877a5eba5b1df6ca0d931
           </div>
 
           <div className="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
@@ -409,7 +354,6 @@ export default function ViewNotePage() {
       )}
 
       {/* Editor */}
-<<<<<<< HEAD
       <main className="flex-1 overflow-hidden bg-gradient-to-b from-background to-muted/20">
         <div className="container mx-auto px-3 sm:px-4 lg:px-6 py-3 sm:py-4 lg:py-6 h-full">
           <RichTextEditor
@@ -419,22 +363,6 @@ export default function ViewNotePage() {
             checkboxOnly={isCheckboxOnly}
             placeholder="Note content..."
           />
-=======
-      <main className="flex-1 overflow-hidden">
-        <div className="container mx-auto px-4 py-4 h-full">
-          <Suspense fallback={
-            <div className="h-full flex items-center justify-center">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-            </div>
-          }>
-            <RichTextEditor
-              content={isEditing ? editedContent : note.content}
-              onChange={setEditedContent}
-              readOnly={!isEditing}
-              placeholder="Note content..."
-            />
-          </Suspense>
->>>>>>> e427749b6667a4cd25c877a5eba5b1df6ca0d931
         </div>
       </main>
 
@@ -472,6 +400,5 @@ export default function ViewNotePage() {
         </div>
       )}
       </div>
-    </>
   );
 }
