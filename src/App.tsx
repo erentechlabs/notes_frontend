@@ -21,7 +21,7 @@ function LoadingFallback() {
   );
 }
 
-// App content with theme initialization
+// Apps content with theme initialization
 function AppContent() {
   // Initialize theme globally
   useTheme();
