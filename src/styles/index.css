@@ -288,26 +288,23 @@
   opacity: 0.6;
 }
 
-/* Checkbox-only mode: prevent editor focus and keyboard popup */
+/* Checkbox-only mode: prevent text selection but allow checkbox interaction */
 .ProseMirror[data-checkbox-only="true"] {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
-  pointer-events: none;
 }
 
-.ProseMirror[data-checkbox-only="true"] ul[data-type="taskList"] li input[type="checkbox"] {
-  pointer-events: auto;
+.ProseMirror[data-checkbox-only="true"] * {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
 }
 
-.ProseMirror[data-checkbox-only="true"] ul[data-type="taskList"] li {
-  pointer-events: none;
-}
-
 .ProseMirror[data-checkbox-only="true"] ul[data-type="taskList"] li input[type="checkbox"] {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
   pointer-events: auto;
 }
 

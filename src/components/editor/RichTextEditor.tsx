@@ -60,10 +60,6 @@ export default function RichTextEditor({
         HTMLAttributes: {
           class: 'task-item-wrapper',
         },
-        onReadOnlyChecked: checkboxOnly ? (_node, checked) => {
-          // Allow checkbox toggling in checkbox-only mode
-          return checked;
-        } : undefined,
       }),
       Color.configure({ types: ['textStyle'] }), // ensure color applies via textStyle
     ],
@@ -78,21 +74,8 @@ export default function RichTextEditor({
         class: 'prose prose-sm sm:prose-lg max-w-none focus:outline-none dark:prose-invert leading-relaxed',
         'data-checkbox-only': checkboxOnly ? 'true' : 'false',
       },
-      // Prevent keyboard from opening on mobile when clicking checkboxes
+      // Prevent keyboard from opening on mobile when in checkbox-only mode
       handleDOMEvents: {
-        click: (_view, event) => {
-          if (!checkboxOnly) {
-            return false;
-          }
-          const target = event.target as HTMLElement;
-          if (target.tagName === 'INPUT' && target.getAttribute('type') === 'checkbox') {
-            // Allow the checkbox to toggle normally
-            return false;
-          }
-          // Prevent clicks on other elements from focusing the editor
-          event.preventDefault();
-          return true;
-        },
         focus: (_view, event) => {
           if (!checkboxOnly) {
             return false;
@@ -104,20 +87,7 @@ export default function RichTextEditor({
           }
           // Prevent focus on editor content to avoid keyboard popup
           event.preventDefault();
-          target.blur();
-          return true;
-        },
-        touchstart: (_view, event) => {
-          if (!checkboxOnly) {
-            return false;
-          }
-          const target = event.target as HTMLElement;
-          // Allow touch on checkboxes
-          if (target.tagName === 'INPUT' && target.getAttribute('type') === 'checkbox') {
-            return false;
-          }
-          // For other elements, prevent default to avoid focus
-          event.preventDefault();
+          (target as any).blur();
           return true;
         },
         keydown: (_view, event) => {
@@ -178,10 +148,10 @@ export default function RichTextEditor({
 
   useEffect(() => {
     if (editor) {
-      // In checkbox-only mode, editor is not editable for text but checkboxes still work
-      editor.setEditable(!readOnly && !checkboxOnly);
+      // Keep editor editable in checkbox-only mode so onUpdate fires for checkbox changes
+      editor.setEditable(!readOnly);
     }
-  }, [editor, readOnly, checkboxOnly]);
+  }, [editor, readOnly]);
 
   if (!editor) {
     return null;
