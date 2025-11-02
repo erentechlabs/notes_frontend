@@ -288,6 +288,29 @@
   opacity: 0.6;
 }
 
+/* Checkbox-only mode: prevent editor focus and keyboard popup */
+.ProseMirror[data-checkbox-only="true"] {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+.ProseMirror[data-checkbox-only="true"] ul[data-type="taskList"] li input[type="checkbox"] {
+  pointer-events: auto;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.ProseMirror[data-checkbox-only="true"] ul[data-type="taskList"] li {
+  pointer-events: none;
+}
+
+.ProseMirror[data-checkbox-only="true"] ul[data-type="taskList"] li input[type="checkbox"] {
+  pointer-events: auto;
+}
+
 /* Mobile-specific improvements */
 @media (max-width: 768px) {
   .ProseMirror ul[data-type="taskList"] li input[type="checkbox"] {
@@ -297,6 +320,12 @@
     /* Prevent zoom on focus */
     font-size: 16px;
     border-width: 2.5px;
+  }
+  
+  /* Additional mobile-specific checkbox-only mode styles */
+  .ProseMirror[data-checkbox-only="true"] {
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
   }
   
   .ProseMirror ul[data-type="taskList"] li > label {

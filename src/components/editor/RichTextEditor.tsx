@@ -60,9 +60,9 @@ export default function RichTextEditor({
         HTMLAttributes: {
           class: 'task-item-wrapper',
         },
-        onReadOnlyChecked: checkboxOnly ? () => {
+        onReadOnlyChecked: checkboxOnly ? (_node, checked) => {
           // Allow checkbox toggling in checkbox-only mode
-          return true;
+          return checked;
         } : undefined,
       }),
       Color.configure({ types: ['textStyle'] }), // ensure color applies via textStyle
@@ -76,34 +76,49 @@ export default function RichTextEditor({
     editorProps: {
       attributes: {
         class: 'prose prose-sm sm:prose-lg max-w-none focus:outline-none dark:prose-invert leading-relaxed',
+        'data-checkbox-only': checkboxOnly ? 'true' : 'false',
       },
       // Prevent keyboard from opening on mobile when clicking checkboxes
       handleDOMEvents: {
-        mousedown: (_view, event) => {
+        click: (_view, event) => {
           if (!checkboxOnly) {
             return false;
           }
           const target = event.target as HTMLElement;
           if (target.tagName === 'INPUT' && target.getAttribute('type') === 'checkbox') {
-            // Prevent focus/keyboard pop-up on mobile while still toggling
-            event.preventDefault();
-            target.click();
-            return true;
+            // Allow the checkbox to toggle normally
+            return false;
           }
-          return false;
+          // Prevent clicks on other elements from focusing the editor
+          event.preventDefault();
+          return true;
+        },
+        focus: (_view, event) => {
+          if (!checkboxOnly) {
+            return false;
+          }
+          const target = event.target as HTMLElement;
+          // Only allow focus on checkboxes
+          if (target.tagName === 'INPUT' && target.getAttribute('type') === 'checkbox') {
+            return false;
+          }
+          // Prevent focus on editor content to avoid keyboard popup
+          event.preventDefault();
+          target.blur();
+          return true;
         },
         touchstart: (_view, event) => {
           if (!checkboxOnly) {
             return false;
           }
           const target = event.target as HTMLElement;
-          // If touching a checkbox on mobile
+          // Allow touch on checkboxes
           if (target.tagName === 'INPUT' && target.getAttribute('type') === 'checkbox') {
-            // Prevent keyboard from opening
-            event.preventDefault();
-            return true;
+            return false;
           }
-          return false;
+          // For other elements, prevent default to avoid focus
+          event.preventDefault();
+          return true;
         },
         keydown: (_view, event) => {
           if (!checkboxOnly) {
@@ -163,10 +178,10 @@ export default function RichTextEditor({
 
   useEffect(() => {
     if (editor) {
-      // In checkbox-only mode, editor is not editable but checkboxes still work
-      editor.setEditable(!readOnly);
+      // In checkbox-only mode, editor is not editable for text but checkboxes still work
+      editor.setEditable(!readOnly && !checkboxOnly);
     }
-  }, [editor, readOnly]);
+  }, [editor, readOnly, checkboxOnly]);
 
   if (!editor) {
     return null;
